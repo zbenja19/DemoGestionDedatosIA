@@ -1,0 +1,96 @@
+[14:45:01] =======================================================
+[14:45:01]   AUDITORÍA DE SEGURIDAD — Sistema Fintech ITY1101
+[14:45:01]   Fecha: 2025-06-10 14:45:01
+[14:45:01] =======================================================
+[14:45:01]   Conexión a PostgreSQL exitosa.
+
+[14:45:01] =======================================================
+[14:45:01]   1. ESCANEO DE DATOS SENSIBLES (Ley 21.719)
+[14:45:01] =======================================================
+[14:45:01]   Se encontraron 9 columnas con datos sensibles:
+[14:45:01]
+[14:45:01]   ⚠  auditoria.clientes.nombre          (text)    — razón: 'nombre'
+[14:45:01]   ⚠  auditoria.clientes.rut              (text)    — razón: 'rut'
+[14:45:01]   ⚠  auditoria.clientes.email            (text)    — razón: 'email'
+[14:45:01]   ⚠  auditoria.clientes.cliente_id       (text)    — razón: 'cliente_id'
+[14:45:01]   ⚠  auditoria.cuentas.cuenta_id         (text)    — razón: 'cuenta'
+[14:45:01]   ⚠  auditoria.cuentas.saldo             (numeric) — razón: 'saldo'
+[14:45:01]   ⚠  auditoria.transacciones_procesadas.monto      (numeric) — razón: 'monto'
+[14:45:01]   ⚠  auditoria.transacciones_procesadas.cliente_id (text)    — razón: 'cliente_id'
+[14:45:01]   ⚠  auditoria.transacciones_procesadas.cuenta_id  (text)    — razón: 'cuenta'
+[14:45:01]
+[14:45:01]   Medidas de protección aplicadas:
+[14:45:01]   • Cifrado AES-256 en reposo (S3 y PostgreSQL)
+[14:45:01]   • TLS 1.3 en tránsito entre todos los servicios
+[14:45:01]   • Campo 'nombre' enmascarado en logs y ambientes no productivos
+[14:45:01]   • Política WORM en S3: ningún proceso puede eliminar registros
+[14:45:01]   • Hash SHA-256 en cada reporte para detectar alteraciones
+
+[14:45:01] =======================================================
+[14:45:01]   2. VERIFICACIÓN DE PERMISOS POR ROL (RBAC)
+[14:45:01] =======================================================
+[14:45:01]
+[14:45:01]   Rol: metabase_reader
+[14:45:01]     ✓  Permisos correctos: ['SELECT']
+[14:45:01]
+[14:45:01]   Rol: modelo_ia
+[14:45:01]     ✓  Permisos correctos: ['INSERT', 'SELECT']
+[14:45:01]
+[14:45:01]   Rol: auditoria_user
+[14:45:01]     ✓  Permisos correctos: ['INSERT', 'SELECT', 'UPDATE']
+
+[14:45:02] =======================================================
+[14:45:02]   3. VERIFICACIÓN TABLA predicciones_modelo
+[14:45:02] =======================================================
+[14:45:02]   Columnas de la tabla predicciones_modelo:
+[14:45:02]     • id                                (integer)
+[14:45:02]     • transaction_id                    (text)
+[14:45:02]     • probabilidad_sospechosa           (double precision)
+[14:45:02]     • prediccion_binaria                (integer)
+[14:45:02]     • timestamp_prediccion              (timestamp without time zone)
+[14:45:02]
+[14:45:02]   ✓ La tabla NO expone datos personales directos.
+[14:45:02]   Solo contiene: transaction_id, probabilidad, predicción y timestamp.
+
+[14:45:02] =======================================================
+[14:45:02]   4. CUMPLIMIENTO LEY 21.719 — CHILE
+[14:45:02] =======================================================
+[14:45:02]
+[14:45:02]   ✓ [IMPLEMENTADO ] Cifrado de datos sensibles
+[14:45:02]              AES-256 en reposo (S3 y PostgreSQL). TLS 1.3 en tránsito.
+[14:45:02]
+[14:45:02]   ✓ [IMPLEMENTADO ] Acceso restringido por roles
+[14:45:02]              RBAC con roles auditoria_user, metabase_reader, modelo_ia y
+[14:45:02]              administrador. Cada rol tiene solo los permisos mínimos necesarios.
+[14:45:02]
+[14:45:02]   ✓ [IMPLEMENTADO ] Minimización de datos (solo lo necesario)
+[14:45:02]              La tabla predicciones_modelo no almacena datos personales directos.
+[14:45:02]              Solo transaction_id, probabilidad y predicción binaria.
+[14:45:02]
+[14:45:02]   ✓ [IMPLEMENTADO ] Decisiones automatizadas explicables
+[14:45:02]              Random Forest permite exportar importancia de variables.
+[14:45:02]              Cada predicción incluye la probabilidad y puede ser revisada
+[14:45:02]              por el rol auditor.
+[14:45:02]
+[14:45:02]   ✓ [IMPLEMENTADO ] Reporte de brechas en 72 horas
+[14:45:02]              Alertas configuradas en CloudWatch y pg_monitor.
+[14:45:02]              El equipo de operaciones recibe notificación ante cualquier anomalía.
+[14:45:02]
+[14:45:02]   ~ [PARCIAL      ] Consentimiento explícito para tratamiento de datos
+[14:45:02]              Los datos provienen de contratos con clientes fintech.
+[14:45:02]              Verificar que el contrato incluya cláusula de uso para
+[14:45:02]              auditoría regulatoria.
+[14:45:02]
+[14:45:02]   ✗ [PENDIENTE    ] Derecho a eliminación (right to be forgotten)
+[14:45:02]              El sistema tiene política WORM (inmutabilidad).
+[14:45:02]              Implementar mecanismo de anonimización en vez de eliminación.
+
+[14:45:02] =======================================================
+[14:45:02]   RESUMEN DE AUDITORÍA
+[14:45:02] =======================================================
+[14:45:02]   Columnas sensibles detectadas : 9
+[14:45:02]   Alertas de permisos           : 0
+[14:45:02]   Roles verificados             : 3
+[14:45:02]   Estado general: ✓ SIN ALERTAS CRÍTICAS DE PERMISOS
+[14:45:02]
+[14:45:02]   Reporte guardado en: seguridad/reporte_auditoria.txt

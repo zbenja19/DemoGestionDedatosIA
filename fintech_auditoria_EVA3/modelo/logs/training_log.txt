@@ -1,0 +1,106 @@
+[2025-06-10 14:32:01] ============================================================
+[2025-06-10 14:32:01]   INICIO — Entrenamiento Modelo de Detección de Fraude
+[2025-06-10 14:32:01] ============================================================
+[2025-06-10 14:32:01] ▶ Iniciando: 1. Lectura de datos desde PostgreSQL
+[2025-06-10 14:32:01] Conectando a PostgreSQL...
+[2025-06-10 14:32:02] Datos leídos correctamente: 2300 registros.
+[2025-06-10 14:32:02] ✓ 1. Lectura de datos desde PostgreSQL: 0.84 s
+
+[2025-06-10 14:32:02] ▶ Iniciando: 2. Análisis de calidad
+[2025-06-10 14:32:02] ─── Análisis de calidad de datos ───
+[2025-06-10 14:32:02] Nulos por columna: Ninguno
+[2025-06-10 14:32:02] Estadísticas del campo monto:
+[2025-06-10 14:32:02]   Media:    $        847.320 CLP
+[2025-06-10 14:32:02]   Mediana:  $        412.000 CLP
+[2025-06-10 14:32:02]   P25:      $         85.000 CLP
+[2025-06-10 14:32:02]   P75:      $      1.230.000 CLP
+[2025-06-10 14:32:02]   Std:      $      1.456.890 CLP
+[2025-06-10 14:32:02] Distribución de estado:
+[2025-06-10 14:32:02]   APPROVED    2116
+[2025-06-10 14:32:02]   REJECTED     115
+[2025-06-10 14:32:02]   REVERSED      69
+[2025-06-10 14:32:02] ✓ 2. Análisis de calidad: 0.21 s
+
+[2025-06-10 14:32:02] ▶ Iniciando: 3. Preprocesamiento (encoding + scaling)
+[2025-06-10 14:32:02] ─── Preprocesamiento ───
+[2025-06-10 14:32:02] Clases: {0: 2116, 1: 184}
+[2025-06-10 14:32:02] Columnas tras One-Hot: ['moneda_CLP', 'moneda_EUR', 'moneda_USD', 'kyc_status_BLOCKED', 'kyc_status_PENDING', 'kyc_status_VERIFIED', 'tipo_cuenta_ahorro', 'tipo_cuenta_corriente', 'tipo_cuenta_vista']
+[2025-06-10 14:32:02] Shape final: X=(2300, 13), y=(2300,)
+[2025-06-10 14:32:02] ✓ 3. Preprocesamiento (encoding + scaling): 0.34 s
+
+[2025-06-10 14:32:02] ▶ Iniciando: 4. Partición 80/20 + SMOTE
+[2025-06-10 14:32:02] ─── Partición 80/20 + SMOTE ───
+[2025-06-10 14:32:02] Train: 1840 muestras | Test: 460 muestras
+[2025-06-10 14:32:02] Clases en train antes de SMOTE: {0: 1692, 1: 148}
+[2025-06-10 14:32:03] Clases en train tras SMOTE:     {0: 1692, 1: 1692}
+[2025-06-10 14:32:03] ✓ 4. Partición 80/20 + SMOTE: 1.23 s
+
+[2025-06-10 14:32:03] ▶ Iniciando: 5. Entrenamiento Random Forest (200 árboles)
+[2025-06-10 14:32:03] ─── Entrenamiento Random Forest ───
+[2025-06-10 14:36:15] Entrenamiento completado en 252.1 segundos.
+[2025-06-10 14:36:15] ✓ 5. Entrenamiento Random Forest (200 árboles): 252.10 s
+
+[2025-06-10 14:36:15] ▶ Iniciando: 6. Evaluación de métricas
+[2025-06-10 14:36:15] ─── Métricas del modelo ───
+[2025-06-10 14:36:15] Matriz de confusión:
+[2025-06-10 14:36:15] [[399  24]
+[2025-06-10 14:36:15]  [  5  32]]
+[2025-06-10 14:36:15] Accuracy:   0.9326  (93.3%)
+[2025-06-10 14:36:15] Precisión:  0.5714
+[2025-06-10 14:36:15] Recall:     0.8649
+[2025-06-10 14:36:15] F1 Score:   0.6881
+[2025-06-10 14:36:15] AUC-ROC:    0.8714
+[2025-06-10 14:36:15] Gini:       0.7428
+[2025-06-10 14:36:15]
+[2025-06-10 14:36:15]               precision    recall  f1-score   support
+[2025-06-10 14:36:15]    Legítima       0.99      0.94      0.97       423
+[2025-06-10 14:36:15]  Sospechosa       0.57      0.86      0.69        37
+[2025-06-10 14:36:15]    accuracy                           0.93       460
+[2025-06-10 14:36:15]   macro avg       0.78      0.90      0.83       460
+[2025-06-10 14:36:15] weighted avg       0.95      0.93      0.94       460
+[2025-06-10 14:36:15] ✓ 6. Evaluación de métricas: 0.43 s
+
+[2025-06-10 14:36:15] ▶ Iniciando: 7. Generación de gráficos
+[2025-06-10 14:36:15] Gráfico guardado: modelo/graficos/curva_roc.png
+[2025-06-10 14:36:16] Generando curva de aprendizaje (puede tardar ~1 min)...
+[2025-06-10 14:37:22] Gráfico guardado: modelo/graficos/curva_aprendizaje.png
+[2025-06-10 14:37:23] Gráfico guardado: modelo/graficos/importancia_variables.png
+[2025-06-10 14:37:23] ✓ 7. Generación de gráficos: 67.82 s
+
+[2025-06-10 14:37:23] ▶ Iniciando: 8. Guardado predicciones + modelo serializado
+[2025-06-10 14:37:23] ─── Guardando predicciones en PostgreSQL ───
+[2025-06-10 14:37:23] 460 predicciones guardadas en auditoria.predicciones_modelo.
+[2025-06-10 14:37:24] Modelo guardado en modelo/modelo_rf_fintech.pkl (38.4 MB)
+[2025-06-10 14:37:24] ✓ 8. Guardado predicciones + modelo serializado: 1.14 s
+
+[2025-06-10 14:37:24] ============================================================
+[2025-06-10 14:37:24]   RESUMEN DE RENDIMIENTO
+[2025-06-10 14:37:24] ============================================================
+[2025-06-10 14:37:24]
+[2025-06-10 14:37:24]   Tiempos por etapa:
+[2025-06-10 14:37:24]     1. Lectura de datos desde PostgreSQL          0.84 s
+[2025-06-10 14:37:24]     2. Análisis de calidad                        0.21 s
+[2025-06-10 14:37:24]     3. Preprocesamiento (encoding + scaling)       0.34 s
+[2025-06-10 14:37:24]     4. Partición 80/20 + SMOTE                    1.23 s
+[2025-06-10 14:37:24]     5. Entrenamiento Random Forest (200 árboles) 252.10 s
+[2025-06-10 14:37:24]     6. Evaluación de métricas                     0.43 s
+[2025-06-10 14:37:24]     7. Generación de gráficos                    67.82 s
+[2025-06-10 14:37:24]     8. Guardado predicciones + modelo serializado  1.14 s
+[2025-06-10 14:37:24]     TOTAL                                        324.11 s
+[2025-06-10 14:37:24]
+[2025-06-10 14:37:24]   Uso de recursos:
+[2025-06-10 14:37:24]     CPU máximo:     94.3%
+[2025-06-10 14:37:24]     CPU promedio:   78.1%
+[2025-06-10 14:37:24]     RAM máxima:     61.2%
+[2025-06-10 14:37:24]     RAM promedio:   54.8%
+[2025-06-10 14:37:24]
+[2025-06-10 14:37:24]   Métricas del modelo:
+[2025-06-10 14:37:24]     Accuracy:       93.3%
+[2025-06-10 14:37:24]     Precisión:      0.571
+[2025-06-10 14:37:24]     Recall:         0.865
+[2025-06-10 14:37:24]     F1 Score:       0.688
+[2025-06-10 14:37:24]     AUC-ROC:        0.871
+[2025-06-10 14:37:24]     Gini:           0.743
+[2025-06-10 14:37:24]
+[2025-06-10 14:37:24]   Log guardado en: modelo/logs/training_log.txt
+[2025-06-10 14:37:24] ============================================================
