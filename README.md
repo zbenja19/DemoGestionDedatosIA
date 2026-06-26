@@ -43,6 +43,7 @@ El archivo principal es modelo/train_model.py. Al ejecutarse realiza ocho etapas
 El archivo seguridad/auditoria_seguridad.py escanea la base de datos en busca de columnas con datos sensibles segun la Ley 21.719 de Chile, verifica los permisos de cada rol RBAC y genera un reporte de cumplimiento. Los roles definidos son metabase_reader, modelo_ia y auditoria_user, cada uno con permisos minimos necesarios.
 
 ## Dashboard
+
 Los resultados del modelo se visualizan en un dashboard HTML disponible en:
 
 https://zbenja19.github.io/DemoGestionDedatosIA/fintech_auditoria_EVA3/dashboard/index.html
@@ -57,7 +58,7 @@ https://zbenja19.github.io/DemoGestionDedatosIA/fintech_auditoria_EVA3/dashboard
 | Gini      | 0.743  |
 | F1 Score  | 0.688  |
 
-
+## Requisitos
 ```bash
 pip install -r requirements.txt
 docker-compose up -d
