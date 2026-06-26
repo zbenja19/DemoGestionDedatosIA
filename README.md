@@ -63,4 +63,38 @@ https://zbenja19.github.io/DemoGestionDedatosIA/fintech_auditoria_EVA3/dashboard
 pip install -r requirements.txt
 docker-compose up -d
 python modelo/train_model.py
+======================================
+======================================
+# 1. Levantar los servicios (PostgreSQL, Kafka, etc.)
+cd fintech_auditoria_EVA3
+docker-compose up -d
+
+# 2. Verificar que los contenedores esten corriendo
+docker ps
+
+# 3. ejecutar los scripts
+python modelo/train_model.py
+```
+
+
+## Ejecucion del Codigo en vs code
+
+```bash
+# Pipeline principal (entrenamiento completo)
+python fintech_auditoria_EVA3/modelo/train_model.py
+
+# Auditoria de seguridad
+python fintech_auditoria_EVA3/seguridad/auditoria_seguridad.py
+
+# Logs de rendimiento
+python fintech_auditoria_EVA3/modelo/logs_rendimiento.py
+
+# Pipeline batch Spark (capa Silver)
+python fintech_auditoria_EVA3/src/batch/spark_transform.py
+
+# Ingesta Kafka (capa Bronze)
+python fintech_auditoria_EVA3/src/ingesta/kafka_producer.py
+
+# Reportes regulatorios (capa Gold)
+python fintech_auditoria_EVA3/src/reportes/reporte_regulatorio.py
 ```
