@@ -35,8 +35,8 @@ El archivo principal es modelo/train_model.py. Al ejecutarse realiza ocho etapas
 4. Divide los datos en 80% entrenamiento y 20% test, y aplica SMOTE para balancear la clase minoritaria (fraude)
 5. Entrena un modelo Random Forest de 200 arboles
 6. Evalua el modelo calculando accuracy, precision, recall, F1 score, AUC-ROC y coeficiente Gini
-7.Genera graficos de curva ROC, curva de aprendizaje e importancia de variables
-8.Guarda las predicciones en la tabla auditoria.predicciones_modelo y serializa el modelo entrenado
+7. Genera graficos de curva ROC, curva de aprendizaje e importancia de variables
+8. Guarda las predicciones en la tabla auditoria.predicciones_modelo y serializa el modelo entrenado
 
 ## Auditoria de seguridad
 
